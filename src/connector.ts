@@ -11,7 +11,7 @@ export class LocalIdentityConnector implements Connectors.IConnector {
     }
 
     async getDisplayName(): Promise<string> {
-        return localization.getMessageFormatter("local-identity-name").format() as string;
+        return localization.translateInstant("local-identity-name");
     }
 
     /**
