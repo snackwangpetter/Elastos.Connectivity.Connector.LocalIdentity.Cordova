@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { _ } from 'svelte-i18n';
     import { navService } from '../nav.service';
     import type { EditProfileNavParams, ExportIdentityNavParams } from '../navparams';
-    import { theme, localization } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { theme, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { ViewType } from '../viewtype';
 
     class ManageIdentityComponent {

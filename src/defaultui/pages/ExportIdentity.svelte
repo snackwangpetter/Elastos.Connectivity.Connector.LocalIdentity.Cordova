@@ -1,8 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import CopyToClipboard from "svelte-copy-to-clipboard";
-    import { _ } from 'svelte-i18n';
-    import { theme } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { theme, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { identityService } from '../../services/identity.service';
 
     let paperkeyCopiedToClipboard = false;

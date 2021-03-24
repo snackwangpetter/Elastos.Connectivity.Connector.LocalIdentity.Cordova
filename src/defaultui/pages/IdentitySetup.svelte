@@ -1,6 +1,5 @@
 <script lang="ts">
     import moment from 'moment';
-    import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
     import { Swiper, SwiperSlide } from 'swiper/svelte';
     import SwiperCore, { Navigation, Pagination, Scrollbar } from 'swiper/core';
@@ -14,7 +13,7 @@
     import { storageService } from '../../services/storage.service';
     import { hiveService } from '../../services/hive.service';
     import { persistenceService } from '../../services/persistence.service';
-    import { storage, theme } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { storage, theme, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { navService } from '../nav.service';
     import { ViewType } from '../viewtype';
     import type { EditProfileNavParams, IdentitySetupNavParams } from '../navparams';

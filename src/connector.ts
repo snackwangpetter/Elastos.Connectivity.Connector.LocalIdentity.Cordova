@@ -1,7 +1,7 @@
 import type { Connectors, PayQuery, TransactionResult } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { identityService } from "./services/identity.service";
 import type { GetCredentialsQuery } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
-import { _, getMessageFormatter } from 'svelte-i18n';
+import { _, localization } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { localIdentityUIHandler } from "./defaultui/localidentityuihandler";
 
 export class LocalIdentityConnector implements Connectors.IConnector {
@@ -11,7 +11,7 @@ export class LocalIdentityConnector implements Connectors.IConnector {
     }
 
     async getDisplayName(): Promise<string> {
-        return getMessageFormatter("local-identity-name").format() as string;
+        return localization.getMessageFormatter("local-identity-name").format() as string;
     }
 
     /**
