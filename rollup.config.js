@@ -6,6 +6,8 @@ import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
+import copy from "rollup-plugin-copy-assets";
+
 //import analyze from 'rollup-plugin-analyzer';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -36,7 +38,7 @@ export default {
 
 		postcss({
             extract: 'bundle.css'
-         }),
+        }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
@@ -56,6 +58,12 @@ export default {
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
 		production && terser(),
+
+		copy({
+			assets: [
+			  "src/assets"
+			],
+		}),
 
         /*analyze({
             limit: 10
