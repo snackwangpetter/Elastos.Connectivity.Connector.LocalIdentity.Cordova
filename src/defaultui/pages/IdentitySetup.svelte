@@ -486,9 +486,9 @@
             >
                 <SwiperSlide>
                     {#if !theme.darkMode}
-                        <img id="first-slide-img" src="assets/localidentity/icons/did.svg" alt="" />
+                        <img id="first-slide-img" src="assets/logo.png" alt="" />
                     {:else}
-                        <img id="first-slide-img" src="assets/localidentity/icons/darkmode/did.svg" alt="">
+                        <img id="first-slide-img" src="assets/logo.png" alt="">
                      {/if}
                     <h1>{$_("welcome")}</h1>
                     <h2>{$_("my-first-did")}</h2>

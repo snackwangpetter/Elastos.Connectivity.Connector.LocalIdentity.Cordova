@@ -9,31 +9,26 @@
     let paperkeyWords: string = null;
     let hidePaperkey = true;
 
-    const handleDidStringSuccessfulCopy = () => {
-        console.log('Did string copy successful');
-    }
-
-    const handleDidStringFailedCopy = () => {
-        console.log('Did string copy failed');
-    }
-
-    const handlePaperkeySuccessfulCopy = () => {
-        this.paperkeyCopiedToClipboard = true;
-        console.log('Paperkey copy successful');
-    }
-
-    const handlePaperkeyFailedCopy = () => {
-        console.log('Paperkey copy failed');
-    }
-
     class ExportIdentityComponent {
-        //private titleBarListener: (icon: TitleBarPlugin.TitleBarIcon) => void = null;
+        public onCopyDidString() {
+            if(cordova.plugins.clipboard) {
+                cordova.plugins.clipboard.copy(didString);
+                console.log('onCopyDidString()', didString);
+            } else {
+                console.log('cordova.plugins.clipboard not added, please add before trying again');
+            }
+           
+        }
 
-        /* TODO ionViewWillLeave() {
-            titleBarManager.setIcon(TitleBarPlugin.TitleBarIconSlot.INNER_LEFT, null);
-            titleBarManager.removeOnItemClickedListener(this.titleBarListener);
-            this.titleBarListener = null;
-        }*/
+        public onCopyPaperKey() {
+            if(cordova.plugins.clipboard) {
+                this.paperkeyCopiedToClipboard = true;
+                cordova.plugins.clipboard.copy(paperkeyWords);
+                console.log('onCopyPaperKey()');
+            } else {
+                console.log('cordova.plugins.clipboard not added, please add before trying again');
+            }
+        }
 
         public showPaperkey() {
             hidePaperkey = !hidePaperkey;
@@ -169,9 +164,7 @@
         <div class="col" size="12">
             <h4>{$_('exportidentity.did')}</h4>
             <h6>{didString}</h6>
-            <CopyToClipboard text={didString} on:copy={handleDidStringSuccessfulCopy} on:fail={handleDidStringFailedCopy} let:onCopy>
-                <button on:click={onCopy}>{$_('exportidentity.copy-did')}</button>
-            </CopyToClipboard>
+            <button on:click={()=>component.onCopyDidString()}>{$_('exportidentity.copy-did')}</button>
         </div>
     </row>
     <row>
@@ -190,9 +183,7 @@
 <footer class:dark-mode={theme.darkMode}>
     {#if !paperkeyCopiedToClipboard}
     <p>{$_('exportidentity.paperkey-not-copied-msg')}</p>
-    <CopyToClipboard text={paperkeyWords} on:copy={handlePaperkeySuccessfulCopy} on:fail={handlePaperkeyFailedCopy} let:onCopy>
-        <button on:click={onCopy}>{$_('exportidentity.copy-paperkey')}</button>
-    </CopyToClipboard>
+    <button on:click={()=>component.onCopyPaperKey()}>{$_('exportidentity.copy-paperkey')}</button>
     {:else}
     <p>{$_('exportidentity.paperkey-copied-msg')}</p>
     {/if}

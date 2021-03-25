@@ -89,6 +89,8 @@
 
 </style>
 
+
+
 <grid class="container" class:dark-mode={theme.darkMode}>
     {#if !theme.darkMode}
         <img src="assets/localidentity/icons/did.svg" alt="">

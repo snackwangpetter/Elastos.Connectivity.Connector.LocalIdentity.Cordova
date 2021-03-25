@@ -9,7 +9,7 @@
 		top: -3rem;
 		right: 0;
 		color: white;
-		background: purple;
+		background: purple
 		border: 2px solid pink;
 	}
 </style>
