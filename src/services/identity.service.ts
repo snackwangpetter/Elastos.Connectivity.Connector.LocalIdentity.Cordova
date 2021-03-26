@@ -1,4 +1,4 @@
-import { DID, storage } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+import { DID, storage, connectivity } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
 import { DIDPublicationStatus } from '../model/didpublicationstatus.model';
 import { HiveCreationStatus } from '../model/hivecreationstatus.model';
 import { persistenceService } from './persistence.service';
@@ -219,7 +219,7 @@ class IdentityService {
             let requestBody = {
                 "did": didString,
                 "memo": memo || "",
-                "requestFrom": "elastos.connectivity.client.cordova.sdk", // TODO: get info about APP, not SDK. This is not useful.
+                "requestFrom": connectivity.getApplicationDID()+"-cordovasdk",
                 "didRequest": payloadObject
             };
 
