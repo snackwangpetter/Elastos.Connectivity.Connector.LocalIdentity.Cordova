@@ -7,7 +7,6 @@ class NavService {
 
     constructor() {
         navigatedView.subscribe((newView)=>{
-            console.log("Active view changed:", newView);
             this.activeView = newView;
         })
     }

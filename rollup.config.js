@@ -5,7 +5,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 import sveltePreprocess from "svelte-preprocess";
-import typescript from "@rollup/plugin-typescript";
+import ts from "@wessberg/rollup-plugin-ts";
 import copy from "rollup-plugin-copy-assets";
 
 //import analyze from 'rollup-plugin-analyzer';
@@ -50,10 +50,7 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
-        typescript({
-            sourceMap: true,
-            inlineSources: !production
-        }),
+        ts(),
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify

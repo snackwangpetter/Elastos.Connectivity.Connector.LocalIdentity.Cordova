@@ -14,18 +14,15 @@ class LocalIdentityUIHandler implements ILocalIdentityUIHandler {
     });
 
     constructor() {
-        console.log("Local identity UI handler created");
     }
 
     private async showRootComponentInModal(onPopupClosed?: ()=>void): Promise<void> {
         return new Promise((resolve)=>{
             if (!this.localIdentityModalShown) {
-                console.log("Showing local identity modal");
                 this.genericModalContainer.show(Root, {
                 }, {
                     onOpen: () => {
                         this.localIdentityModalShown = true
-                        console.log("Modal is opened, resolving");
                         resolve();
                     },
                     onClosed: ()=>{
@@ -47,10 +44,9 @@ class LocalIdentityUIHandler implements ILocalIdentityUIHandler {
      */
     async showCreateIdentity(): Promise<void> {
         return new Promise(async (resolve)=>{
-            console.log("Local identity: showCreateIdentity()");
+            //console.log("Local identity: showCreateIdentity()");
             await this.showRootComponentInModal();
-            console.log("Setting view type to IdentitySetup");
-            // navService.navigateTo(ViewType.ManageIdentity);
+            //console.log("Setting view type to IdentitySetup");
             navService.navigateTo(ViewType.IdentitySetup, {
                 onIdentityCreationCompleted:() => {
                     resolve();

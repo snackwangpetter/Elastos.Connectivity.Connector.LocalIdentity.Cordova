@@ -100,7 +100,6 @@
     newProps = {},
     options = {}
   ) => {
-    console.log("OPEN modal");
     Component = bind(NewComponent, newProps);
     state = { ...defaultState, ...options };
     onOpen = () => {
@@ -112,7 +111,6 @@
       dispatch('closing');
     },
     onOpened = () => {
-      console.log("ONOPENED", callback);
       if (callback.onOpened) callback.onOpened();
       dispatch('opened');
     };
@@ -123,7 +121,6 @@
   };
 
   export const close = (callback: ModalCallbacks = {}) => {
-    console.log("CLOSE modal");
     onClose = callback.onClose || onClose;
     onClosed = callback.onClosed || onClosed;
     Component = null;

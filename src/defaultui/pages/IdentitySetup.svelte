@@ -53,7 +53,7 @@
 
         onSwiped(data) {
             activeSlideIndex = swiper().activeIndex;
-            console.log("on swiped", data, activeSlideIndex)
+            //console.log("on swiped", data, activeSlideIndex)
         }
 
         async newDID() {

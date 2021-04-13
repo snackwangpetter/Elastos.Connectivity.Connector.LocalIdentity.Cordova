@@ -19,7 +19,6 @@
     export let activeView: NavigatedView = { viewType: ViewType.None };
 
     let unsubscriber = navigatedView.subscribe((newView)=>{
-        console.log("[RootComponent] Active view changed:", newView);
         activeView = newView;
     })
 
