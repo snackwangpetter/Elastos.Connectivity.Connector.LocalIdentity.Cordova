@@ -1,10 +1,9 @@
-import type { Connectors, PayQuery, TransactionResult } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
+import type { Interfaces, Wallet, DID } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { identityService } from "./services/identity.service";
-import type { GetCredentialsQuery } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { _, localization } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { localIdentityUIHandler } from "./defaultui/localidentityuihandler";
 
-export class LocalIdentityConnector implements Connectors.IConnector {
+export class LocalIdentityConnector implements Interfaces.Connectors.IConnector {
     public name: string = "local-identity";
 
     constructor() {
@@ -18,7 +17,7 @@ export class LocalIdentityConnector implements Connectors.IConnector {
      * DID API
      */
 
-    async getCredentials(query: GetCredentialsQuery): Promise<DIDPlugin.VerifiablePresentation> {
+    async getCredentials(query: DID.GetCredentialsQuery): Promise<DIDPlugin.VerifiablePresentation> {
         if (!await identityService.identityIsFullyReadyToUse()) {
             // No local identity yet: we have to create one first
             console.log("Local identity is not ready to use, showing identity creation screen");
@@ -49,7 +48,7 @@ export class LocalIdentityConnector implements Connectors.IConnector {
      * Wallet API
      */
 
-    async pay(query: PayQuery): Promise<TransactionResult> {
+    async pay(query: Wallet.PayQuery): Promise<Wallet.TransactionResult> {
         throw new Error("Method not implemented.");
     }
 

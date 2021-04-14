@@ -4,7 +4,7 @@ import Root from './pages/Root.svelte';
 import { ViewType } from "./viewtype";
 import { navService } from "./nav.service";
 import type { IdentitySetupNavParams } from "./navparams";
-import type { GetCredentialsQuery } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
+import type { DID } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { identityService } from "../services/identity.service";
 
 class LocalIdentityUIHandler implements ILocalIdentityUIHandler {
@@ -57,7 +57,7 @@ class LocalIdentityUIHandler implements ILocalIdentityUIHandler {
         });
     }
 
-    showRequestGetCredentials(query: GetCredentialsQuery): Promise<DIDPlugin.VerifiablePresentation> {
+    showRequestGetCredentials(query: DID.GetCredentialsQuery): Promise<DIDPlugin.VerifiablePresentation> {
         // NOTE: No UI shown, direct response
         return identityService.generatePresentationForClaims(query.claims);
     }

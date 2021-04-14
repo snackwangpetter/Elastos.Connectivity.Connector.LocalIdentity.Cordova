@@ -1,4 +1,5 @@
 import { Hive } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+import { HiveCreationStatus } from '../model/hivecreationstatus.model';
 import { persistenceService } from './persistence.service';
 
 class HiveService {
@@ -77,7 +78,7 @@ class HiveService {
                     console.log("Vault API could be called, all good!");
 
                     // Everything is all right, now we can consider the hive setup as successfully completed.
-                    persistenceInfo.hive.creationStatus = Hive.HiveCreationStatus.VAULT_CREATED_AND_VERIFIED;
+                    persistenceInfo.hive.creationStatus = HiveCreationStatus.VAULT_CREATED_AND_VERIFIED;
                     await persistenceService.savePersistentInfo(persistenceInfo);
                     return true;
                 }
