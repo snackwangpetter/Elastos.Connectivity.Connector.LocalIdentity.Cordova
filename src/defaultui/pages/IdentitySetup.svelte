@@ -13,10 +13,11 @@
     import { storageService } from '../../services/storage.service';
     import { hiveService } from '../../services/hive.service';
     import { persistenceService } from '../../services/persistence.service';
-    import { storage, theme, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { storage, theme } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { navService } from '../nav.service';
     import { ViewType } from '../viewtype';
     import type { EditProfileNavParams, IdentitySetupNavParams } from '../navparams';
+    import { _ } from "svelte-i18n";
 
     // https://swiperjs.com/swiper-api#custom-build
     SwiperCore.use([Navigation, Pagination, Scrollbar]);

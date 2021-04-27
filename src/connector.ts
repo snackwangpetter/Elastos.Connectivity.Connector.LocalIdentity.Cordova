@@ -1,6 +1,6 @@
 import type { Interfaces, Wallet, DID } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { identityService } from "./services/identity.service";
-import { _, localization } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
+import { localization } from "@elastosfoundation/elastos-connectivity-sdk-cordova";
 import { localIdentityUIHandler } from "./defaultui/localidentityuihandler";
 
 export class LocalIdentityConnector implements Interfaces.Connectors.IConnector {

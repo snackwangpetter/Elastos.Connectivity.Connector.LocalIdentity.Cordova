@@ -1,8 +1,9 @@
 <script lang="ts">
     import { navService } from '../nav.service';
     import type { EditProfileNavParams, ExportIdentityNavParams } from '../navparams';
-    import { theme, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { theme } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { ViewType } from '../viewtype';
+    import { _ } from "svelte-i18n";
 
     class ManageIdentityComponent {
         /* TODO ionViewDidEnter() {

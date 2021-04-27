@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { theme, storage, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { theme, storage } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { onMount } from 'svelte';
     import { navService } from '../nav.service';
     import type { EditProfileNavParams } from '../navparams';
+    import { _ } from "svelte-i18n";
 
     type Profile = {
         name: string;

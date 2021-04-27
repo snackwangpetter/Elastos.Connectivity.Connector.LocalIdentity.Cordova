@@ -1,8 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import CopyToClipboard from "svelte-copy-to-clipboard";
-    import { theme, _ } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
+    import { theme } from '@elastosfoundation/elastos-connectivity-sdk-cordova';
     import { identityService } from '../../services/identity.service';
+    import { _ } from "svelte-i18n";
 
     let paperkeyCopiedToClipboard = false;
     let didString: string = null;
@@ -17,7 +18,7 @@
             } else {
                 console.log('cordova.plugins.clipboard not added, please add before trying again');
             }
-           
+
         }
 
         public onCopyPaperKey() {
