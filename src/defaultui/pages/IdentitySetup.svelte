@@ -69,7 +69,7 @@
                         showSpinner = true;
                         await identityService.createLocalIdentity();
                         console.log("New DID created, returning to identity setup");
-                        navService.navigateTo(ViewType.IdentitySetup);
+                        navService.navigateTo(ViewType.IdentitySetup, navParams);
                     }
                 }
             } as EditProfileNavParams);
@@ -261,6 +261,7 @@
          * been at first, if the identity existed.
          */
         continueToOriginalLocation() {
+            console.log("navParams:", navParams)
             navParams.onIdentityCreationCompleted();
         }
 
