@@ -45,15 +45,17 @@ class LocalIdentityUIHandler implements ILocalIdentityUIHandler {
     async showCreateIdentity(): Promise<void> {
         return new Promise(async (resolve)=>{
             //console.log("Local identity: showCreateIdentity()");
-            await this.showRootComponentInModal();
+            await this.showRootComponentInModal(() => {
+                // Popup closed by user, or closed after identity creation is complete.
+                resolve();
+            });
             //console.log("Setting view type to IdentitySetup");
             navService.navigateTo(ViewType.IdentitySetup, {
-                onIdentityCreationCompleted:() => {
-                    resolve();
+                onIdentityCreationCompleted: async () => {
+                    await this.genericModalContainer.close();
+                    // We will resolve in the popup closed callback above.
                 }
             } as IdentitySetupNavParams);
-
-            // NOTE: if user cancels, we never fulfill this promise for now.
         });
     }
 

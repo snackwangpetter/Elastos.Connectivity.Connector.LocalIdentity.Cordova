@@ -20,27 +20,36 @@ export class LocalIdentityConnector implements Interfaces.Connectors.IConnector 
     async getCredentials(query: DID.GetCredentialsQuery): Promise<DIDPlugin.VerifiablePresentation> {
         if (!await identityService.identityIsFullyReadyToUse()) {
             // No local identity yet: we have to create one first
-            console.log("Local identity is not ready to use, showing identity creation screen");
+            console.log("Local identity is not ready to use. Showing identity creation screen");
             await localIdentityUIHandler.showCreateIdentity();
             console.log("Local identity - getCredentials() - after showCreateIdentity()");
-            return null; // TODO: for now, after the initial creation, we don't proceed to the initial request. This is to be done
         }
-        else {
+
+        // Make sure that if we had to create an identity, it is fully ready now.
+        if (await identityService.identityIsFullyReadyToUse()) {
+            console.log("Local identity - getCredentials()")
             let credential = await localIdentityUIHandler.showRequestGetCredentials(query);
             return credential;
+        }
+        else {
+            return null;
         }
     }
 
     async generateAppIdCredential(appInstanceDID: string, appDID: string): Promise<DIDPlugin.VerifiableCredential> {
         if (!await identityService.identityIsPublished()) {
             // No local identity yet: we have to create one first
-            console.log("Local identity is not ready to use, showing identity creation screen");
+            console.log("Local identity is not ready to use. Showing identity creation screen");
             await localIdentityUIHandler.showCreateIdentity();
-            return null; // TODO: for now, after the initial creation, we don't proceed to the initial request. This is to be done
         }
-        else {
+
+        // Make sure that if we had to create an identity, it is fully ready now.
+        if (await identityService.identityIsPublished()) {
             let credential = await localIdentityUIHandler.showRequestIssueAppIDCredential(appInstanceDID, appDID);
             return credential;
+        }
+        else {
+            return null;
         }
     }
 
