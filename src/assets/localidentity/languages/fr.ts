@@ -33,7 +33,6 @@ export const fr = {
     'publish-did-msg': 'Enregistre l\'identité dans le répertoire public. Cette étape prend entre 10 et 15 minutes.',
     'config-storage': 'Espace de stockage',
     'config-storage-msg': 'Configure un espace de stockage pour les données de vos applications.',
-    'progress-msg': 'Cette étape étant longue, vous pouvez quitter l\'application à tout moment et revenir plus tard, rien ne sera perdu.',
     'done-msg': 'C\'est prêt, vous avez maintenant une identité décentralisée et un espace de stockage! Lorsque vous aurez mieux compris les avantages des DIDs plus tard, vous pourrez l\'exporter et l\'utiliser dans d\'autres applications.',
     'create-my-did': 'Créer mon Identité',
     'error-msg': 'Hmm, il semble qu\'il y ait eu une erreur. Le problème a été envoyé aux développeurs mais pour l\'instant, souhaitez-vous relancer la création d\'identité depuis le début?',

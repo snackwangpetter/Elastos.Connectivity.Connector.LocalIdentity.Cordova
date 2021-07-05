@@ -5,14 +5,22 @@ import { persistenceService } from './persistence.service';
 import { hiveService } from './hive.service';
 
 declare let didManager: DIDPlugin.DIDManager;
+declare let hiveManager: HivePlugin.HiveManager;
 
-const assistAPIEndpoint = "https://wogbjv3ci3.execute-api.us-east-1.amazonaws.com/prod";
+const assistAPIEndpoint = "https://assist-restapi.tuum.tech/v2" // DID 2.0
+//const assistAPIEndpoint = "https://wogbjv3ci3.execute-api.us-east-1.amazonaws.com/prod/v1"; // DID 1.0
 const assistAPIKey = "IdSFtQosmCwCB9NOLltkZrFy5VqtQn8QbxBKQoHPw7zp3w0hDOyOYjgL53DO3MDH";
+
+const availableProviders = [
+    "https://api.elastos.io/eid", // elastos.io EID
+    "https://api.trinity-tech.cn/eid" // Trinity tech EID
+]
 
 type AssistBaseResponse = {
     meta: {
         code: number,
-        message: string
+        message: string,
+        description?: string
     }
 }
 
@@ -72,7 +80,7 @@ class IdentityService {
     }
 
     /**
-     * Tells if the DID is published and confirmed. Hvie doesn't need to be ready yet.
+     * Tells if the DID is published and confirmed. Hive doesn't need to be ready yet.
      */
     public async identityIsPublished(): Promise<boolean> {
         let persistentInfo = persistenceService.getPersistentInfo();
@@ -81,6 +89,9 @@ class IdentityService {
     }
 
     public async createLocalIdentity() {
+        // First, auto detect the best DID resolver (fastest, accessible)
+        await this.autoDetectTheBestProvider();
+
         let persistentInfo = persistenceService.getPersistentInfo();
         let createdDIDInfo = await this.didAccess.fastCreateDID("ENGLISH");
 
@@ -225,7 +236,7 @@ class IdentityService {
 
             console.log("Assist API request body:", requestBody);
 
-            let fetchResponse = await fetch(assistAPIEndpoint + "/v1/didtx/create", {
+            let fetchResponse = await fetch(assistAPIEndpoint + "/didtx/create", {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -237,15 +248,21 @@ class IdentityService {
             try {
                 let response: AssistCreateTxResponse = await fetchResponse.json();
                 console.log("Assist successful response:", response);
-                if (response && response.meta && response.meta.code == 200 && response.data.confirmation_id) {
-                    console.log("All good, DID has been submitted. Now waiting.");
+                if (response && response.meta) {
+                    if (response.meta.code == 200 && response.data.confirmation_id) {
+                        console.log("All good, DID has been submitted. Now waiting.");
 
-                    let persistentInfo = persistenceService.getPersistentInfo();
-                    persistentInfo.did.publicationStatus = DIDPublicationStatus.AWAITING_PUBLICATION_CONFIRMATION;
-                    persistentInfo.did.assistPublicationID = response.data.confirmation_id;
-                    await persistenceService.savePersistentInfo(persistentInfo);
+                        let persistentInfo = persistenceService.getPersistentInfo();
+                        persistentInfo.did.publicationStatus = DIDPublicationStatus.AWAITING_PUBLICATION_CONFIRMATION;
+                        persistentInfo.did.assistPublicationID = response.data.confirmation_id;
+                        await persistenceService.savePersistentInfo(persistentInfo);
 
-                    resolve();
+                        resolve();
+                    }
+                    else {
+                        console.error("Assist API returned an error:", response.meta);
+                        reject(response.meta.description);
+                    }
                 } else {
                     let error = "Successful response received from the assist API, but response can't be understood";
                     reject(error);
@@ -267,7 +284,7 @@ class IdentityService {
 
             console.log("Requesting identity publication status to Assist for confirmation ID " + persistentInfo.did.assistPublicationID);
 
-            let fetchResponse = await fetch(assistAPIEndpoint + "/v1/didtx/confirmation_id/" + persistentInfo.did.assistPublicationID, {
+            let fetchResponse = await fetch(assistAPIEndpoint + "/didtx/confirmation_id/" + persistentInfo.did.assistPublicationID, {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
@@ -465,6 +482,91 @@ class IdentityService {
             }
         });
     }
+
+    /**
+     * Tries to find the best elastos API provider for the current device location. When found, this provider
+     * is selected and used as currently active provider.
+     */
+     public async autoDetectTheBestProvider(): Promise<void> {
+        console.log("Trying to auto detect the best elastos api provider");
+        let bestProvider = await this.findTheBestProvider();
+        console.log("Best provider found:", bestProvider);
+
+        // Immediatelly let plugins know about this selected provider, because DID sessions
+        // need to set the right resolver urls even if no user is signed in.
+        await this.setResolverUrl();
+    }
+
+    /**
+     * Tries to find the best provider and returns it.
+     */
+    private _bestProviderEndpoint: string; // EID resolve endpoint of the best provider found
+    private async findTheBestProvider(): Promise<string> {
+        // To know the best provider, we try to call an api on all of them and then select the fastest
+        // one to answer.
+        this._bestProviderEndpoint = null;
+        let testPromises: Promise<void>[]= availableProviders.map(p => this.callTestAPIOnProvider(p));
+        await Promise.race(testPromises);
+        return this._bestProviderEndpoint;
+    }
+
+    /**
+     * Call a test API on a provider to check its speed in findTheBestProvider().
+     * - All errors are catched and not forwarded because we don't want Promise.race() to throw, we
+     * want it to resolve the first successful call to answer.
+     * - API calls that return errors are resolved with a timeout, to make sure they are considered as
+     * "slow" but on the other hand that they resolve one day (we can't stack unresolved promises forever).
+     */
+    private callTestAPIOnProvider(providerEndpoint: string): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor
+        return new Promise(async (resolve) => {
+            let testApiUrl = providerEndpoint;
+
+            const param = {
+                method: 'getblockcount',
+            };
+
+            try {
+                let data = await fetch(providerEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(param)
+                });
+
+                console.log("Provider "+providerEndpoint+" just answered the test api call with value", data);
+                // Set the provider as best provider if no one did that yet. We are the fastest api call to answer.
+                if (!this._bestProviderEndpoint)
+                    this._bestProviderEndpoint = providerEndpoint;
+                resolve();
+            } catch (e) {
+                console.warn("Auto detect api call to " + testApiUrl + " failed with error:", e);
+                // Resolve later, to let othe providers answer faster
+                setTimeout(() => {
+                    resolve();
+                }, 30000); // 30s
+            }
+        });
+    }
+
+        private async setResolverUrl(): Promise<void> {
+            let didResolverUrl = this._bestProviderEndpoint;
+
+            console.log('Changing DID plugin resolver in DID and Hive plugins to :', didResolverUrl);
+            // DID Plugin
+            await new Promise<void>((resolve, reject) => {
+                didManager.setResolverUrl(didResolverUrl, () => {
+                    resolve();
+                }, (err) => {
+                    console.error('didplugin setResolverUrl error:', err);
+                    reject(err);
+                });
+            });
+
+            // Hive plugin
+            await hiveManager.setDIDResolverUrl(didResolverUrl);
+          }
 
     /**
      * Save in global preferences that the user has chosen to use the external identity wallet app (elastOS)

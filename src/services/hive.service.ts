@@ -6,7 +6,6 @@ class HiveService {
     private availableHideNodeProviders: string[] = [
         "https://hive1.trinity-tech.io",
         "https://hive2.trinity-tech.io"
-        //"http://192.168.31.114:5000"
     ];
 
     private hiveClient: HivePlugin.Client;

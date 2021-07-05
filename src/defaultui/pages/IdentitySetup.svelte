@@ -242,7 +242,7 @@
             do {
                 if (!firstAttempt) {
                     console.log("Waiting a few seconds before checking again");
-                    await this.sleep(15000); // Wait 15s before trying again
+                    await this.sleep(1000); // Wait 1s before trying again
                 }
 
                 await identityService.checkPublicationStatusAndUpdate();
@@ -429,16 +429,6 @@
                 text-align: center;
             };
         }
-
-        .progress-msg {
-            p {
-                margin: 0;
-                padding: 12.5px 20px 20px;
-                font-size: 12px;
-                font-weight: 600;
-                text-align: center;
-            };
-        }
     }
 
     footer {
@@ -454,7 +444,7 @@
             span {
                 font-size: 12px;
             }
-        };
+        }
 
         button {
             height: 50px;
@@ -522,65 +512,61 @@
         </div>
     {:else}
         <div class="progress-container" class:dark-mode={theme.darkMode}>
-            <ion-row class="steps-row">
-                <ion-col size="12">
-                    <ion-label>
-                        <h1>{$_("identitysetup.create-did")}</h1>
-                        <h2>{$_("identitysetup.create-did-msg")}</h2>
-                    </ion-label>
-                    {#if componentWatcher("isLocalDIDcreated")}
-                        <ion-icon
-                            class="done"
-                            name="checkmark-circle-outline"
-                        />
-                    {:else}
-                        <ion-spinner />
-                    {/if}
-                </ion-col>
-            </ion-row>
-            <ion-icon name="arrow-down-circle-outline" />
-            <ion-row class="steps-row">
-                <ion-col size="12">
-                    <ion-label>
-                        <h1>{$_("identitysetup.publish-did")}</h1>
-                        <h2>{$_("identitysetup.publish-did-msg")}</h2>
-                    </ion-label>
-                    {#if componentWatcher("isDIDOnChain")}
-                        <ion-icon
-                            class="done"
-                            name="checkmark-circle-outline"
-                        />
-                    {:else if !componentWatcher("isDIDBeingPublished")}
-                        <ion-icon class="pending" name="timer-outline" />
-                    {:else if !componentWatcher("isDIDOnChain")}
-                        <ion-spinner />
-                    {/if}
-                </ion-col>
-            </ion-row>
-            <ion-icon name="arrow-down-circle-outline" />
-            <ion-row class="steps-row">
-                <ion-col size="12">
-                    <ion-label>
-                        <h1>{$_("identitysetup.config-storage")}</h1>
-                        <h2>{$_("identitysetup.config-storage-msg")}</h2>
-                    </ion-label>
-                    {#if componentWatcher("isHiveVaultReady")}
-                        <ion-icon
-                            class="done"
-                            name="checkmark-circle-outline"
-                        />
-                    {:else if !componentWatcher("isHiveBeingConfigured")}
-                        <ion-icon class="pending" name="timer-outline" />
-                    {:else}
-                        <ion-spinner />
-                    {/if}
-                </ion-col>
-            </ion-row>
-
             {#if !componentWatcher("isEverythingReady")}
-                <div class="progress-msg">
-                    <p>{$_("identitysetup.progress-msg")}</p>
-                </div>
+                <ion-row class="steps-row">
+                    <ion-col size="12">
+                        <ion-label>
+                            <h1>{$_("identitysetup.create-did")}</h1>
+                            <h2>{$_("identitysetup.create-did-msg")}</h2>
+                        </ion-label>
+                        {#if componentWatcher("isLocalDIDcreated")}
+                            <ion-icon
+                                class="done"
+                                name="checkmark-circle-outline"
+                            />
+                        {:else}
+                            <ion-spinner />
+                        {/if}
+                    </ion-col>
+                </ion-row>
+                <ion-icon name="arrow-down-circle-outline" />
+                <ion-row class="steps-row">
+                    <ion-col size="12">
+                        <ion-label>
+                            <h1>{$_("identitysetup.publish-did")}</h1>
+                            <h2>{$_("identitysetup.publish-did-msg")}</h2>
+                        </ion-label>
+                        {#if componentWatcher("isDIDOnChain")}
+                            <ion-icon
+                                class="done"
+                                name="checkmark-circle-outline"
+                            />
+                        {:else if !componentWatcher("isDIDBeingPublished")}
+                            <ion-icon class="pending" name="timer-outline" />
+                        {:else if !componentWatcher("isDIDOnChain")}
+                            <ion-spinner />
+                        {/if}
+                    </ion-col>
+                </ion-row>
+                <ion-icon name="arrow-down-circle-outline" />
+                <ion-row class="steps-row">
+                    <ion-col size="12">
+                        <ion-label>
+                            <h1>{$_("identitysetup.config-storage")}</h1>
+                            <h2>{$_("identitysetup.config-storage-msg")}</h2>
+                        </ion-label>
+                        {#if componentWatcher("isHiveVaultReady")}
+                            <ion-icon
+                                class="done"
+                                name="checkmark-circle-outline"
+                            />
+                        {:else if !componentWatcher("isHiveBeingConfigured")}
+                            <ion-icon class="pending" name="timer-outline" />
+                        {:else}
+                            <ion-spinner />
+                        {/if}
+                    </ion-col>
+                </ion-row>
             {:else}
                 <div class="done-msg">
                     {#if !theme.darkMode}
@@ -627,19 +613,7 @@
     {#if componentWatcher("wasTemporaryIdentityCreationStarted") && !suggestRestartingFromScratch}
         <div>
             {#if !componentWatcher("isEverythingReady")}
-                <div>
-                    <p>
-                        <strong>{componentWatcher("getProgress")}</strong><span
-                            >% {$_("identitysetup.takes-long-time")}</span
-                        >
-                    </p>
-                    <!-- TODO -->
-                    <ion-progress-bar
-                        mode="ios"
-                        type="determinate"
-                        value="progress"
-                    />
-                </div>
+                <!-- Nothing here -->
             {:else}
                 <button on:click={()=>component.continueToOriginalLocation()}>
                     {$_("continue")}
