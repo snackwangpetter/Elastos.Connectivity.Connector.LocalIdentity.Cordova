@@ -1,6 +1,6 @@
 {
   "name": "@elastosfoundation/elastos-connector-localidentity-cordova",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Local identity/ built-in connector for the Elastos Connectivity SDK.",
   "main": "dist/index.js",
   "module": "dist.esm/index.js",
