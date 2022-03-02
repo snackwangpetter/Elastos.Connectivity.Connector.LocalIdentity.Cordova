@@ -1,7 +1,7 @@
 export const zh = {
 
   /********** Global **********/
-  'local-identity-name': 'Temporary Identity',
+  'local-identity-name': '临时身份',
   'welcome': '欢迎来到',
   'my-first-did': '我的第一个身份',
   'temp-did': '临时身份',
@@ -30,7 +30,7 @@ export const zh = {
     'create-did': '创建身份',
     'create-did-msg': '向您的设备添加新身份',
     'publish-did': '发布身份',
-    'publish-did-msg': 'Record identity to the public repository. This step takes about 15 seconds.',
+    'publish-did-msg': '将身份记录到公开仓库上。 此步骤大约需要 15 秒。',
     'config-storage': '配置存储空间',
     'config-storage-msg': '为您的身份数据设置个人存储。',
     'done-msg': '完成所有操作后，您现在拥有了去中心身份和存储空间！当您以后更好地了解DID的优势时，可以将其导出并在其他应用中重用',
@@ -60,12 +60,12 @@ export const zh = {
     'titlebar-title': '导入身份',
     'did': '身份',
     'copy-did': '复制身份',
-    'copy-paperkey': 'Copy Paper Key',
-    'paperkey': 'Paper Key',
-    'show-paperkey': 'Show Paper Key',
-    'hide-paperkey': 'Hide Paper Key',
-    'paperkey-not-copied-msg': 'Safely store the words in your paper key in the right order. After that, you can copy and paste them in the import identity flow of your favorite identity apps (ex: Elastos Essentials).',
-    'paperkey-copied-msg': 'Your paper key has been copied to your clipboard. Please save them safely. You can now open your third party identity app and import your identity using these words.'
+    'copy-paperkey': '拷贝纸质密钥',
+    'paperkey': '纸质密钥',
+    'show-paperkey': '显示纸质密钥',
+    'hide-paperkey': '隐藏纸质密钥',
+    'paperkey-not-copied-msg': '以正确的顺序将单词安全地存储在您的纸质密钥中。之后，您可以将它们复制并粘贴到您喜欢的身份应用程序（例如：Elastos Essentials）的导入身份流程中。',
+    'paperkey-copied-msg': '您的纸质密钥已复制到剪贴板，请安全保存。现在您可以打开第三方身份应用程序并使用这些单词导入您的身份。'
   },
 
   'manageidentity': {
