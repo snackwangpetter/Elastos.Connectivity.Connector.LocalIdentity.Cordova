@@ -7,7 +7,7 @@ import { hiveService } from './hive.service';
 declare let didManager: DIDPlugin.DIDManager;
 declare let hiveManager: HivePlugin.HiveManager;
 
-const assistAPIEndpoint = "https://assist-restapi.tuum.tech/v2" // DID 2.0
+const assistAPIEndpoint = "https://assist.trinity-tech.io/v2";  //"https://assist-restapi.tuum.tech/v2" // DID 2.0
 //const assistAPIEndpoint = "https://wogbjv3ci3.execute-api.us-east-1.amazonaws.com/prod/v1"; // DID 1.0
 const assistAPIKey = "IdSFtQosmCwCB9NOLltkZrFy5VqtQn8QbxBKQoHPw7zp3w0hDOyOYjgL53DO3MDH";
 
@@ -230,7 +230,7 @@ class IdentityService {
             let requestBody = {
                 "did": didString,
                 "memo": memo || "",
-                "requestFrom": connectivity.getApplicationDID()+"-cordovasdk",
+                "requestFrom": connectivity.getApplicationDID() + "-cordovasdk",
                 "didRequest": payloadObject
             };
 
@@ -325,7 +325,7 @@ class IdentityService {
                     reject(error);
                 }
             }
-            catch(err) {
+            catch (err) {
                 console.log("Assist api call error:", err);
                 reject(err);
             }
@@ -384,18 +384,18 @@ class IdentityService {
         // Take all the claims requested in the original intent and return credentials for each of them, with fake data.
         let credentials: DIDPlugin.VerifiableCredential[] = [];
 
-        for(let claimName of Object.keys(claims)) {
-        let credential = await this.createCredential(claimName, persistenceInfo.did.storePassword);
-        console.log("Created temporary credential for claim:", claimName, credential);
+        for (let claimName of Object.keys(claims)) {
+            let credential = await this.createCredential(claimName, persistenceInfo.did.storePassword);
+            console.log("Created temporary credential for claim:", claimName, credential);
 
-        if (credential)
-            credentials.push(credential);
+            if (credential)
+                credentials.push(credential);
         }
 
         return this.createCredaccessPresentation(credentials);
-      }
+    }
 
-      private async createCredential(claimName: string, storePassword: string): Promise<DIDPlugin.VerifiableCredential> {
+    private async createCredential(claimName: string, storePassword: string): Promise<DIDPlugin.VerifiableCredential> {
         const did = await identityService.getLocalDID();
         const localProfile = await storage.getJSON('profile', {});
         console.log('Local profile', localProfile);
@@ -406,23 +406,23 @@ class IdentityService {
         // Handle a few standard claims nicely. Others default to a default value.
         let properties: any = {};
         switch (claimName) {
-          case "name":
-            properties.name = localName ? localName : "Anonymous user";
-            break;
-          case "email":
-            properties.email = localEmail ? localEmail : "unknown@email.com";
-          default:
-            // Unhandled properties. Credential properties cannot be empty, so we fill that with dummy data.
-            properties[claimName] = "Information not provided";
+            case "name":
+                properties.name = localName ? localName : "Anonymous user";
+                break;
+            case "email":
+                properties.email = localEmail ? localEmail : "unknown@email.com";
+            default:
+                // Unhandled properties. Credential properties cannot be empty, so we fill that with dummy data.
+                properties[claimName] = "Information not provided";
         }
 
-        return new Promise((resolve)=>{
-          did.issueCredential(did.getDIDString(), "#"+claimName, ["TemporaryCredential"], 365, properties, storePassword, (cred)=>{
-            resolve(cred);
-          }, (err)=>{
-            console.error(err);
-            resolve(null);
-          });
+        return new Promise((resolve) => {
+            did.issueCredential(did.getDIDString(), "#" + claimName, ["TemporaryCredential"], 365, properties, storePassword, (cred) => {
+                resolve(cred);
+            }, (err) => {
+                console.error(err);
+                resolve(null);
+            });
         });
     }
 
@@ -446,7 +446,7 @@ class IdentityService {
      * Generates a appid credential for hive authentication, silently
      */
     public async generateApplicationIDCredential(appinstancedid: string, mainNativeApplicationDID: string): Promise<DIDPlugin.VerifiableCredential> {
-        return new Promise(async (resolve)=>{
+        return new Promise(async (resolve) => {
             let persistentInfo = persistenceService.getPersistentInfo();
 
             console.log("Generating appid credential");
@@ -487,7 +487,7 @@ class IdentityService {
      * Tries to find the best elastos API provider for the current device location. When found, this provider
      * is selected and used as currently active provider.
      */
-     public async autoDetectTheBestProvider(): Promise<void> {
+    public async autoDetectTheBestProvider(): Promise<void> {
         console.log("Trying to auto detect the best elastos api provider");
         let bestProvider = await this.findTheBestProvider();
         console.log("Best provider found:", bestProvider);
@@ -505,7 +505,7 @@ class IdentityService {
         // To know the best provider, we try to call an api on all of them and then select the fastest
         // one to answer.
         this._bestProviderEndpoint = null;
-        let testPromises: Promise<void>[]= availableProviders.map(p => this.callTestAPIOnProvider(p));
+        let testPromises: Promise<void>[] = availableProviders.map(p => this.callTestAPIOnProvider(p));
         await Promise.race(testPromises);
         return this._bestProviderEndpoint;
     }
@@ -535,7 +535,7 @@ class IdentityService {
                     body: JSON.stringify(param)
                 });
 
-                console.log("Provider "+providerEndpoint+" just answered the test api call with value", data);
+                console.log("Provider " + providerEndpoint + " just answered the test api call with value", data);
                 // Set the provider as best provider if no one did that yet. We are the fastest api call to answer.
                 if (!this._bestProviderEndpoint)
                     this._bestProviderEndpoint = providerEndpoint;
@@ -550,23 +550,23 @@ class IdentityService {
         });
     }
 
-        private async setResolverUrl(): Promise<void> {
-            let didResolverUrl = this._bestProviderEndpoint;
+    private async setResolverUrl(): Promise<void> {
+        let didResolverUrl = this._bestProviderEndpoint;
 
-            console.log('Changing DID plugin resolver in DID and Hive plugins to :', didResolverUrl);
-            // DID Plugin
-            await new Promise<void>((resolve, reject) => {
-                didManager.setResolverUrl(didResolverUrl, () => {
-                    resolve();
-                }, (err) => {
-                    console.error('didplugin setResolverUrl error:', err);
-                    reject(err);
-                });
+        console.log('Changing DID plugin resolver in DID and Hive plugins to :', didResolverUrl);
+        // DID Plugin
+        await new Promise<void>((resolve, reject) => {
+            didManager.setResolverUrl(didResolverUrl, () => {
+                resolve();
+            }, (err) => {
+                console.error('didplugin setResolverUrl error:', err);
+                reject(err);
             });
+        });
 
-            // Hive plugin
-            await hiveManager.setDIDResolverUrl(didResolverUrl);
-          }
+        // Hive plugin
+        await hiveManager.setDIDResolverUrl(didResolverUrl);
+    }
 
     /**
      * Save in global preferences that the user has chosen to use the external identity wallet app (elastOS)
