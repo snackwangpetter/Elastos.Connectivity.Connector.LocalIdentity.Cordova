@@ -2,6 +2,7 @@ import type { ILocalIdentityUIHandler } from "./interfaces/ilocalidentityuihandl
 import { localIdentityManager as localIdentity } from "./manager";
 import { LocalIdentityConnector } from "./connector";
 import { localizationService } from "./services/localization.service";
+import { persistenceService } from "./services/persistence.service";
 
 localizationService.init();
 
@@ -13,6 +14,9 @@ export type {
 export {
     // Classes
     LocalIdentityConnector,
+
+    // Persistence
+    persistenceService,
 
     // Singleton instances
     localIdentity
