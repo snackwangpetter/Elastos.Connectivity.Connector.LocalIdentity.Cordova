@@ -112,7 +112,7 @@
 
 <div class="container" class:dark-mode={theme.darkMode}>
     <input placeholder="{$_('edit-profile.enter-name')}" bind:value={name}/>
-    <input placeholder="{$_('edit-profile.enter-email')}" type="email" bind:value={email}/>
+    <!-- <input placeholder="{$_('edit-profile.enter-email')}" type="email" bind:value={email}/> -->
 
     {#if navParams && navParams.useExistingProfileInfo}
         <p>{$_('edit-profile.message')}</p>
