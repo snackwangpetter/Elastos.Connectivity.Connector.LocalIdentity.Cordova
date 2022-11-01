@@ -13,7 +13,7 @@ const assistAPIKey = "IdSFtQosmCwCB9NOLltkZrFy5VqtQn8QbxBKQoHPw7zp3w0hDOyOYjgL53
 
 const availableProviders = [
     "https://api.elastos.io/eid", // elastos.io EID
-    "https://api.trinity-tech.cn/eid" // Trinity tech EID
+    "https://api.trinity-tech.io/eid" // Trinity tech EID
 ]
 
 type AssistBaseResponse = {
